@@ -15,9 +15,10 @@
 			var thisForm = this;
 			var username = $("#loginusername").val();
 			var password = $("#loginpassword").val();
+			
 			var dataString = 'username='+username+'&password='+password+'&type=Login';
 			
-			if(dataString){
+			if(dataString && !isBlank(username) && !isBlank(password)){
 			
 			
 			$.ajax({
@@ -39,6 +40,8 @@
                         
 				
 			
+			}else{
+				alert("complete all field");
 			}
 		});
 		
@@ -47,23 +50,28 @@
 			var email = $("#regemail").val();
 			var password = $("#regpassword").val();
 			var dataString = 'username='+username+'&email='+email+'&password='+password+'&type=Register';
-			if(dataString){
-			$.ajax({
-                        	type: "POST",
-                        	url: "login.php",
-                        	data:dataString,
-                        	datatype: 'json',
-                        	success: function (data) {
-                        		obj = JSON.parse(data);
-                        		if(obj.type=="SUCCESS"){
-                        			checkstatus()
-                        		}else{
-                        			alert("Failed");
-                        		}
+			if(dataString && !isBlank(username) && !isBlank(password) && !isBlank(email)){
+				if(!ValidateEmail(email)){
+				}else{
+					$.ajax({
+                        			type: "POST",
+                        			url: "login.php",
+                        			data:dataString,
+                        			datatype: 'json',
+                        			success: function (data) {
+                        				obj = JSON.parse(data);
+                        				if(obj.type=="SUCCESS"){
+                        					checkstatus()
+                        				}else{
+                        					alert("Failed");
+                        				}
+                        			}
+                        		});
                         	}
-                        });
 				
 			
+			}else{
+				alert("complete all field");
 			}
 			
 		});
@@ -126,6 +134,19 @@
                         	}
                         });
                 }
+                
+                function isBlank(str) {
+    			return (!str || /^\s*$/.test(str));
+		}
+		
+		function ValidateEmail(mail) {
+ 			if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail)){
+    				return (true)
+  			}
+    			alert("You have entered an invalid email address!")
+    			return (false)
+		}
+
         });
 
 </script>
